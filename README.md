@@ -6,7 +6,7 @@ grep -Eoc '(vmx|svm)' /proc/cpuinfo
 ```
 
 ## Instalación KVM
-1. Instalar dependencias y KVM
+1. Instalar dependencias y KVM:
 ```bash
 sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils virtinst virt-manager
 ```
@@ -27,5 +27,4 @@ sudo usermod -aG kvm $USER
 radamuz@ubuntu:~/primera-prueba-vagrant$ brctl show
 bridge name	bridge id		STP enabled	interfaces
 virbr0		8000.5254009ff684	yes		virbr0-nic
-
 ```
