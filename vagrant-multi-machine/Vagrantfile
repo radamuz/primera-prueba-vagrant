@@ -36,8 +36,8 @@ boxes = [
         :cpu => "1"
     },
     {
-        :ssh_username => "debiancentosdos",
-        :ssh_password => "debiancentosdos123",
+        :ssh_username => "centosuserdos",
+        :ssh_password => "centosuserdos123",
         :ssh_insert_key => false,
         :name => "server4",
         :box => "generic/centos7",
