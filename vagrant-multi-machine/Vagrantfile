@@ -9,6 +9,7 @@ boxes = [
         :name => "server1",
         :box => "generic/ubuntu2010",
         :eth1 => "192.168.0.251",
+        :eth2 => "192.168.1.251",
         :mem => "512",
         :cpu => "1"
     },
@@ -19,6 +20,7 @@ boxes = [
         :name => "server2",
         :box => "centos/7",
         :eth1 => "192.168.0.252",
+        :eth2 => "192.168.1.252",
         :mem => "512",
         :cpu => "1"
     },
@@ -29,6 +31,7 @@ boxes = [
         :name => "server3",
         :box => "generic/debian10",
         :eth1 => "192.168.0.253",
+        :eth2 => "192.168.1.253",
         :mem => "512",
         :cpu => "1"
     },
@@ -39,6 +42,7 @@ boxes = [
         :name => "server4",
         :box => "generic/centos7",
         :eth1 => "192.168.0.254",
+        :eth2 => "192.168.1.254",
         :mem => "512",
         :cpu => "1"
     }
@@ -72,6 +76,11 @@ Vagrant.configure("2") do |config|
       config.vm.box = opts[:box]
       
         config.vm.network "public_network", ip: opts[:eth1],
+        :dev => "xenbr0",
+        :mode => "bridge",
+        :type => "bridge"
+
+        config.vm.network "public_network", ip: opts[:eth2],
         :dev => "xenbr0",
         :mode => "bridge",
         :type => "bridge"      
