@@ -28,3 +28,13 @@ radamuz@ubuntu:~/primera-prueba-vagrant$ brctl show
 bridge name	bridge id		STP enabled	interfaces
 virbr0		8000.5254009ff684	yes		virbr0-nic
 ```
+
+5. Crear adaptador puente xenbr0:
+```bash
+sudo netplan generate
+
+sudo netplan apply
+
+ip a | grep xenbr0
+```
+> Fuente: <https://www.techrepublic.com/article/how-to-create-a-bridge-network-on-linux-with-netplan/>
