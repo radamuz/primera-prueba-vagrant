@@ -31,6 +31,16 @@ boxes = [
         :eth1 => "192.168.0.253",
         :mem => "512",
         :cpu => "1"
+    },
+    {
+        :ssh_username => "debiancentosdos",
+        :ssh_password => "debiancentosdos123",
+        :ssh_insert_key => false,
+        :name => "server4",
+        :box => "generic/centos7",
+        :eth1 => "192.168.0.254",
+        :mem => "512",
+        :cpu => "1"
     }
 ]
 
