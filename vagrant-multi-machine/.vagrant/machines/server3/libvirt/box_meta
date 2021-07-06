@@ -1,1 +1,1 @@
-{"name":"generic/ubuntu2010","version":"3.2.24","provider":"libvirt","directory":"boxes/generic-VAGRANTSLASH-ubuntu2010/3.2.24/libvirt"}
+{"name":"generic/debian10","version":"3.2.24","provider":"libvirt","directory":"boxes/generic-VAGRANTSLASH-debian10/3.2.24/libvirt"}

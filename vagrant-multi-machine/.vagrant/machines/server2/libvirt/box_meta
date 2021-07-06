@@ -1,1 +1,1 @@
-{"name":"generic/ubuntu2010","version":"3.2.24","provider":"libvirt","directory":"boxes/generic-VAGRANTSLASH-ubuntu2010/3.2.24/libvirt"}
+{"name":"centos/7","version":"2004.01","provider":"libvirt","directory":"boxes/centos-VAGRANTSLASH-7/2004.01/libvirt"}
