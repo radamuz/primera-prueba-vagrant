@@ -4,18 +4,21 @@
 boxes = [
     {
         :name => "server1",
+        :box => "generic/ubuntu2010",
         :eth1 => "192.168.0.251",
         :mem => "512",
         :cpu => "1"
     },
     {
         :name => "server2",
+        :box => "centos/7",
         :eth1 => "192.168.0.252",
         :mem => "512",
         :cpu => "1"
     },
     {
         :name => "server3",
+        :box => "generic/debian10",
         :eth1 => "192.168.0.253",
         :mem => "512",
         :cpu => "1"
@@ -23,15 +26,14 @@ boxes = [
 ]
 
 Vagrant.configure("2") do |config|
-
-  config.vm.box = "generic/ubuntu2010"
-  
   
   boxes.each do |opts|
     config.vm.define opts[:name] do |config|
-        
-        config.vm.hostname = opts[:name]
-        
+      
+      config.vm.hostname = opts[:name]
+
+      config.vm.box = opts[:eth1]
+      
         config.vm.network "public_network", ip: opts[:eth1],
         :dev => "xenbr0",
         :mode => "bridge",
