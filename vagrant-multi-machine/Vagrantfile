@@ -45,6 +45,17 @@ boxes = [
         :eth2 => "192.168.1.254",
         :mem => "512",
         :cpu => "1"
+    },
+    {
+        :ssh_username => "windowsuser",
+        :ssh_password => "windowsuser123",
+        :ssh_insert_key => false,
+        :name => "server5",
+        :box => "peru/windows-server-2019-standard-x64-eval",
+        :eth1 => "192.168.0.250",
+        :eth2 => "192.168.1.250",
+        :mem => "512",
+        :cpu => "1"
     }
 ]
 

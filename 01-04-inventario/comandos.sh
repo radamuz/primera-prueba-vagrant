@@ -21,3 +21,5 @@ cd /etc/ansible/host_vars
 sudo su
 
 echo "ansible_become: False" > 192.168.0.251
+
+ansible apt -a id 
