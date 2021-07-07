@@ -41,11 +41,12 @@
 # leading 0s:
 
 #db-[99:101]-node.example.com
-192.168.0.251
-192.168.0.252
-192.168.0.253
-192.168.0.254
-192.168.1.251
-192.168.1.252
-192.168.1.253
-192.168.1.254
+[apt]
+192.168.0.251 ansible_user=ubuntuuser ansible_become_password=ubuntuuser123
+192.168.0.252 ansible_user=centosuser ansible_become_password=centosuser123
+#192.168.0.253
+#192.168.0.254
+#192.168.1.251
+#192.168.1.252
+#192.168.1.253
+#192.168.1.254

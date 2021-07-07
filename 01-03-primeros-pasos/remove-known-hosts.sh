@@ -1,0 +1,1 @@
+rm "/home/$USER/.ssh/known_hosts"

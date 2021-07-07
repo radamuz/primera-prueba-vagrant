@@ -1,0 +1,12 @@
+[debian]
+192.168.0.253 ansible_user=debianuser ansible_become_password=debianuser123
+[ubuntu]
+192.168.0.251 ansible_user=ubuntuuser ansible_become_password=ubuntuuser123 ansible_become=False # Las variables del host tienen preferencia a las variables de grupo
+
+# Grupo padre con subgrupos
+[apt:children]
+debian
+ubuntu
+
+[apt:vars]
+ansible_become=True
