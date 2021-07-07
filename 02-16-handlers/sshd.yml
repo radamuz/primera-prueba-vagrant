@@ -1,0 +1,13 @@
+---
+- name: Actualizar configuracion sshd_config
+  hosts: curso01
+  become: True
+  tasks:
+    - name: Copiar fichero
+      copy: src=sshd_config dest=/etc/ssh/sshd_config
+      notify: restart_sshd
+  # Los handlers se ejecutan al final del playbook
+  handlers:
+    - name: restart_sshd
+      service: name=sshd state=restarted
+...

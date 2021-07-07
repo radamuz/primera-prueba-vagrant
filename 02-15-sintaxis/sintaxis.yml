@@ -1,0 +1,44 @@
+- name: Crear fichero usando variables
+  hosts: curso01
+  # hosts: localhost
+  # connection: local
+  vars:
+    - miip: "1.2.3.4"
+    - milista: ["apache2","mariadb","php5"]
+    - milista_larga:
+      - apache2
+      - mariadb
+      - php5
+    - midic: {web: "apache2", bd: "mariadb", script: "php5"}
+    - midic_largo:
+      - web: apache2
+      - bd: mariadb
+      - script: php5
+    - mitexto: |
+        primera linea
+        segunda linea
+        tercera linea
+    - milinealarga: >
+        inicio linea
+        continuacion linea
+        final linea
+  tasks:
+    - name: Crear fichero hosts
+      template: src=../02-14-variables/hosts.j2 dest=/tmp/hosts
+    - name: Crear fichero hosts 2
+      become: True
+      template: 
+        src: ../02-14-variables/hosts.j2 
+        dest: /tmp/hosts
+        owner: root
+        group: root
+        mode: 0644
+
+    - debug: var=miip
+    - debug: var=milista
+    - debug: var=milista_larga
+    - debug: var=midic
+    - debug: var=midic.web
+    - debug: var=midic_largo
+    - debug: var=mitexto
+    - debug: var=milinealarga

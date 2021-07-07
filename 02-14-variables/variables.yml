@@ -1,6 +1,6 @@
 - name: Crear fichero usando variables
   hosts: curso01
-  hosts: localhost
+  # hosts: localhost
   # connection: local
   vars:
     - miip: "1.2.3.4"
