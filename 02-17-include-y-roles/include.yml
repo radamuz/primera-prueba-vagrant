@@ -1,0 +1,9 @@
+- name: Primer play
+  hosts: curso01
+  become: True
+  tasks:
+    - name: Instalar vim
+      apt: name=vim state=latest
+    - include: instalar_apache2.yml
+      
+

@@ -54,7 +54,7 @@ boxes = [
         :box => "peru/windows-server-2019-standard-x64-eval",
         :eth1 => "192.168.0.250",
         :eth2 => "192.168.1.250",
-        :mem => "1024",
+        :mem => "512",
         :cpu => "2"
     }
 ]
