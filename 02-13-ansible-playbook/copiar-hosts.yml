@@ -1,0 +1,19 @@
+---
+- name: Copiar fichero /etc/hosts a los servidores
+  hosts: curso01
+  become: True
+  tasks: 
+    - name: Copiar /etc/hosts
+      copy: src=/etc/hosts dest=/etc/hosts
+    - name: Copiar /etc/nsswitch.conf
+      copy: src=/etc/nsswitch.conf dest=/etc/nsswitch.conf
+    
+- name: Playbook numero 2
+  hosts: curso02
+  become: True
+  tasks: 
+    - name: Copiar /etc/hosts
+      copy: src=/etc/hosts dest=/etc/hosts
+    - name: Copiar /etc/nsswitch.conf
+      copy: src=/etc/nsswitch.conf dest=/etc/nsswitch.conf
+    

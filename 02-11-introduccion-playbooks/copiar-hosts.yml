@@ -3,6 +3,10 @@
   hosts: all !curso05
   # remote_user:
   become: True
+  # become_user:
+  # become_method: sudo/su/pbrun/ksu
+  # Comprobar si se pueden realizar las acciones en el servidor:
+  # check_mode: True/false
   tasks: 
     - name: Copiar /etc/hosts
       # Utilizando módulo copy
