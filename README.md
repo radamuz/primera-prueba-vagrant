@@ -38,3 +38,8 @@ sudo netplan apply
 ip a | grep xenbr0
 ```
 > Fuente: <https://www.techrepublic.com/article/how-to-create-a-bridge-network-on-linux-with-netplan/>
+
+## Evitar que se demore mucho el apagado, por culpa de /usr/lib/libvirt/libvirt-guests.sh
+```bash
+sudo sed -i 's/SHUTDOWN_TIMEOUT=300/SHUTDOWN_TIMEOUT=0/g' /usr/lib/libvirt/libvirt-guests.sh
+```
