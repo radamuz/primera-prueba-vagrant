@@ -1,0 +1,15 @@
+[madrid]
+curso06 ansible_host=192.168.1.251 ansible_user=ubuntuuser ansible_become_password=ubuntuuser123
+curso07 ansible_host=192.168.1.252 ansible_user=centosuser ansible_become_password=centosuser123
+[barcelona]
+curso08 ansible_host=192.168.1.253 ansible_user=debianuser ansible_become_password=debianuser123
+curso09 ansible_host=192.168.1.254 ansible_user=debianuser ansible_become_password=centosuserdos123
+[servweb]
+curso06 ansible_host=192.168.1.251 ansible_user=ubuntuuser ansible_become_password=ubuntuuser123
+curso08 ansible_host=192.168.1.253 ansible_user=debianuser ansible_become_password=debianuser123
+[bdweb] 
+curso07 ansible_host=192.168.1.252 ansible_user=centosuser ansible_become_password=centosuser123
+curso09 ansible_host=192.168.1.254 ansible_user=centosuserdos ansible_become_password=centosuserdos123
+[web:children]
+bdweb
+servweb

@@ -70,20 +70,26 @@ Vagrant.configure("2") do |config|
       # config.ssh.password = opts[:ssh_password]
       # config.ssh.insert_key = opts[:ssh_insert_key]
 
-      config.vm.provision "shell",
-      env: {"MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username]},
-      inline: <<-SHELL
-        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
-        systemctl restart sshd.service
-
-        useradd -m -s /usr/bin/bash $MYUSER
-        echo -e "$MYPASS\n$MYPASS" | passwd $MYUSER
-
-        usermod -aG sudo $MYUSER
-
-        echo "$MYUSER    ALL=(ALL)       ALL" > /etc/sudoers
-      SHELL
-
+      if opts[:ssh_username] != 'windowsuser'
+        config.vm.provision "shell",
+        env: {"MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username]},
+        inline: <<-SHELL
+          sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+          systemctl restart sshd.service
+  
+          useradd -m -s /usr/bin/bash $MYUSER
+          echo -e "$MYPASS\n$MYPASS" | passwd $MYUSER
+  
+          usermod -aG sudo $MYUSER
+  
+          echo "$MYUSER    ALL=(ALL)       ALL" > /etc/sudoers
+        SHELL
+      else
+        config.vm.provision "shell",
+        env: {"MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username]},
+        path: "../01-08-windows/ConfigureRemotingForAnsible.ps1"
+      end
+          
       config.vm.box = opts[:box]
       
         config.vm.network "public_network", ip: opts[:eth1],

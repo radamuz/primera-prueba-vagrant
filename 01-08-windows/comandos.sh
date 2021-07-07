@@ -9,3 +9,6 @@ ansible windows -i /home/radamuz/primera-prueba-vagrant/02-12-esenciales/inventa
 
 # Sin especificar los usuarios se puede hacer, pero deben de estar indicados en el inventario
 ansible windows -i /home/radamuz/primera-prueba-vagrant/02-12-esenciales/inventarios0 -c winrm -m setup -e ansible_winrm_server_cert_validation=ignore
+
+# Excluir host windows 
+ansible all -i /home/radamuz/primera-prueba-vagrant/02-12-esenciales/inventarios0 --limit '!windows' -m ping
