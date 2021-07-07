@@ -1,0 +1,10 @@
+---
+- name: Copiar fichero /etc/hosts a los servidores
+  hosts: all !curso05
+  # remote_user:
+  become: True
+  tasks: 
+    - name: Copiar /etc/hosts
+      # Utilizando módulo copy
+      copy: src=/etc/hosts dest=/etc/hosts
+  
