@@ -1,0 +1,20 @@
+- name: Instalar y configurar apache2
+  hosts: curso01:curso03
+  become: true
+  roles:
+    # - { role: apache2, lista_usuarios: ["usuario1","root1"], when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu" }
+    - role: apache2
+      lista_usuarios:
+        - usuario1
+        - root1
+      when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+      lista_paquetes3:
+        - clinfo
+        - colplot
+    - { role: apache2, lista_usuarios: ["usuario1","root1"], when: ansible_distribution == "CentOS" }
+    # - { role: httpd, lista_usuarios: ["usuario1","root1"] }
+    # - role: apache2
+    #   lista_usuarios: 
+    #     - usuario1 
+    #     - root1
+    #     - ramon

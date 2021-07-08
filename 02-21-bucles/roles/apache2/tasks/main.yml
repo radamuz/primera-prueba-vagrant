@@ -1,0 +1,65 @@
+- name: Instalar apache2
+  include: instalar-apache2.yml
+
+- name: Actualizar repos
+  apt: name="*" state=latest
+  
+- name: Instalar paquetes
+  apt: name={{ item }} state=latest
+  with_items:
+    - mysql-common
+    - postgresql
+    - php
+
+- name: Instalar paquetes
+  apt: name={{ item }} state=latest
+  with_items: "{{ lista_paquetes2 }}"
+
+- name: Instalar paquetes
+  apt: 
+    name: "{{ lista_paquetes3 }}"
+    state: latest
+
+- name: Instalar paquetes
+  apt: 
+    name: ['mysql-common', 'postgresql', 'php']
+    state: latest
+
+- name: Crear usuarios necesarios
+  user: name={{ item.nombre }} groups={{ item.grupo }}
+  with_items:
+    - { nombre: usuario1, grupo: www-data }
+    - { nombre: usuario2, grupo: www-data }
+    
+- name: Instalar paquetes
+  apt: 
+    name: "{{ lista_paquetes }}"
+    state: latest
+
+- name: Crear usuarios necesarios
+  user: name={{ item.nombre }} groups={{ item.grupo }}
+  with_items: "{{ dic_usuarios }}"
+
+
+# - name: Instalar apache2
+#   apt: name=apache2 state=latest
+#   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+# - name: Instalar httpd
+#   yum: name=httpd state=latest
+#   when: ansible_distribution == "CentOS"
+
+# - name: Iniciar y habilitar servicio
+#   service: name=apache2 state=started enabled=true
+#   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
+
+# - name: Iniciar y habilitar servicio
+#   service: name=httpd state=started enabled=true
+#   when: ansible_distribution == "CentOS"
+
+# - name: Copiar fichero de configuracion
+#   copy: src=apache2.conf dest=/etc/apache2/apache2.conf
+#   notify: restart_httpd
+
+# - name: Copiar fichero index.html
+#   template: src=index.html.j2 dest=/var/www/html/index.html
