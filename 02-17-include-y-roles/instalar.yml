@@ -1,0 +1,5 @@
+- name: Instalar y configurar apache2
+  hosts: curso03
+  become: True
+  roles: 
+    - apache2

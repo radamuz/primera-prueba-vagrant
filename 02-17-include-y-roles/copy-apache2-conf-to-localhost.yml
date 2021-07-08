@@ -1,0 +1,7 @@
+- hosts: curso01
+  tasks:
+    # Copy remote file (host.example.com:/tmp/somefile) into
+    # /tmp/fetched/host.example.com/tmp/somefile on local machine
+    - fetch:
+        src: /etc/apache2/apache2.conf
+        dest: ~/primera-prueba-vagrant/02-17-include-y-roles/
