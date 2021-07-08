@@ -1,0 +1,10 @@
+- name: Instalar y configurar apache2
+  hosts: all !windows
+  become: true
+  roles:
+    - { role: apache2, lista_usuarios: ["usuario1","root1"] }
+    # - role: apache2
+    #   lista_usuarios: 
+    #     - usuario1 
+    #     - root1
+    #     - ramon
