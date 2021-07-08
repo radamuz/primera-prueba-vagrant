@@ -10,3 +10,5 @@ curso03 ansible_host=192.168.1.253 ansible_user=debianuser ansible_become_passwo
 [bdweb] 
 curso02 ansible_host=192.168.1.252 ansible_user=centosuser ansible_become_password=centosuser123
 curso04 ansible_host=192.168.1.254 ansible_user=centosuserdos ansible_become_password=centosuserdos123
+[windows]
+curso05 ansible_host=192.168.1.250 ansible_user=vagrant ansible_password=vagrant ansible_connection=winrm ansible_winrm_server_cert_validation=ignore
