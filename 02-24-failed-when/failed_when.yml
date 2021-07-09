@@ -1,0 +1,7 @@
+- name: Ejecutamos un comando y ejecutamos failed_when
+  hosts: curso04
+  tasks:
+    - name: Obtener interfaces de red
+      command: /usr/sbin/ip address show
+      register: salida
+      failed_when: "'eth2' not in salida.stdout"

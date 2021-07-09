@@ -1,0 +1,10 @@
+- name: No marcar nunca como cambiado
+  hosts: curso04
+  tasks:
+    - name: Obtener interfaces de red
+      command: uptime
+      register: uptime
+      # changed_when: true
+    
+    - debug:
+        var: uptime
