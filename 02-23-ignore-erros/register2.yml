@@ -1,0 +1,17 @@
+- name: Playbook para la clase de register
+  hosts: curso01
+  tasks: 
+    - name: Visualizar /etc/hosts2
+      command: cat /etc/hosts2
+      register: salida
+      ignore_errors: True
+
+    - name: Visualizar salida estandard
+      debug: 
+        var: salida.stdout
+      when: salida is not failed
+
+    - name: Visualizar salida estandard de error
+      debug: 
+        var: salida.stderr
+      when: salida is failed
