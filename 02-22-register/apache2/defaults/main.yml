@@ -1,0 +1,7 @@
+lista_usuarios: ["root","alberto","www-data"]
+lista_paquetes: ["bcron","keepass2"]
+lista_paquetes2: ["autolog","atop"]
+lista_paquetes3: ["calife","cdist"]
+dic_usuarios: 
+  - { nombre: usuario3, grupo: www-data }
+  - { nombre: usuario4, grupo: www-data }

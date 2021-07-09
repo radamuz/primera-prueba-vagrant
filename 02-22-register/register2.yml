@@ -1,0 +1,11 @@
+- name: Playbook para la clase de register
+  hosts: curso01
+  tasks: 
+    - name: Ejecutar comando uptime
+      command: uptime
+      register: salida_uptime
+      when: 1==2
+    - name: Visualizar variable
+      debug: 
+        var: salida_uptime
+        # var: salida_uptime.stdout

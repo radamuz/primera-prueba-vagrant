@@ -1,0 +1,16 @@
+Hola al servidor {{ ansible_fqdn }}
+
+{% if ansible_distribution == "Debian" %}
+Este sistema es Debian!!!!!!
+{% elif ansible_distribution == "Ubuntu" %}
+Este sistema es Ubuntu!!!!!!
+{% endif %}
+
+Lista de usuarios:
+{% for usuario in lista_usuarios %}
+{{ usuario }}
+{% endfor %}
+
+Final de la plantilla......dasdasdds
+
+{# Esto tan solo es un comentario más#}
