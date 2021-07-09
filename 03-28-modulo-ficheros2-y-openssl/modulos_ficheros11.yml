@@ -1,0 +1,22 @@
+- name: Ejemplos de modulos de ficheros y openssl
+  hosts: curso04
+  become: True
+  tasks:
+
+    - name: Ver SElinux antes de modificarlo
+      command: cat /etc/selinux/config
+      register: salida
+    - debug: 
+        var: salida.stdout_lines
+
+    - name: Deshabilitar SElinux
+      lineinfile:
+        path: /etc/selinux/config
+        regexp: "^SELINUX="
+        line: "SELINUX=disabled"
+
+    - name: Ver SElinux después de modificarlo
+      command: cat /etc/selinux/config
+      register: salida_post
+    - debug: 
+        var: salida_post.stdout_lines

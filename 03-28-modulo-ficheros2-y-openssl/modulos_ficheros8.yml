@@ -1,0 +1,67 @@
+- name: Ejemplos de modulos de ficheros y openssl
+  hosts: curso03
+  become: True
+  tasks:
+
+    - name: Crear fichero con contenido especificado
+      copy:
+        content: Esto es un ejemplo 4
+        dest: /tmp/ejemplo_file
+        backup: yes
+
+    - name: Propiedades fichero
+      file: 
+        path: /tmp/ejemplo_file
+        backup: yes
+        state: absent
+
+    - name: Comprobar que directorio exista
+      file: 
+        path: /var/log/journal
+        state: directory
+        owner: root
+        group: systemd-journal
+        mode: 2755
+      notify: reiniciar_journald
+
+    - name: Utilizando stat
+      stat:
+        path: /etc/
+      register: datos
+    # - name: Utilizando stat
+    #   stat:
+    #     path: /etc/services
+    #   register: datos
+
+    - debug:
+        msg: Es un directorio
+      when: datos.stat.isdir
+
+    - name: Copiar configuración red
+      fetch:
+        src: /etc/network/interfaces
+        dest: /tmp/backup
+
+  handlers:
+    - name: reiniciar_journald
+      service:
+        name: systemd-journald
+        state: restarted
+
+
+    # - name: Visualizar backups realizados al modificar el contenido del archivo 2
+    #   command: ls -la /tmp/
+    #   register: visualizar2
+
+    # - debug:
+    #     var: visualizar2.stdout_lines
+        
+    # - name: Visualizar backups realizados al modificar el contenido del archivo
+    #   command: ls -la /tmp/ejemplo_file
+    #   register: visualizar
+    #   ignore_errors: True
+
+    # - debug:
+    #     var: visualizar.stderr_lines
+
+

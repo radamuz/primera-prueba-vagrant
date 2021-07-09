@@ -1,0 +1,16 @@
+- name: Ejemplos de modulos de ficheros y openssl
+  hosts: curso03
+  become: True
+  tasks:
+
+    - name: Extrae fichero en el destino
+      unarchive:
+        src: /tmp/oracle.tgz
+        dest: /opt/oracle
+        remote_src: True
+        owner: jose
+        group: jose
+        mode: 2777
+        list_files: yes
+
+

@@ -1,0 +1,26 @@
+- name: Ejemplos de modulos de ficheros y openssl
+  hosts: curso04
+  become: True
+  tasks:
+    - name: Install the latest version of sudo
+      yum:
+        name: ["sudo"]
+        state: latest
+
+    - name: Ver SElinux antes de modificarlo
+      command: cat /etc/sudoers
+      register: salida
+    - debug: 
+        var: salida.stdout_lines
+
+    - name: Eliminar grupo desde sudoers
+      lineinfile:
+        path: /etc/sudoers
+        state: absent
+        regexp: "^%wheel"
+
+    - name: Ver SElinux después de modificarlo
+      command: cat /etc/sudoers
+      register: salida_post
+    - debug: 
+        var: salida_post.stdout_lines

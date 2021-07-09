@@ -1,0 +1,37 @@
+- name: Ejemplos de modulos de ficheros y openssl
+  hosts: curso04
+  become: True
+  tasks:
+
+    - name: Ver sshd_config antes de modificarlo
+      command: cat /etc/ssh/sshd_config
+      register: salida
+    - debug: 
+        var: salida.stdout_lines
+
+    # - name: Insert/Update "Match User" configuration block in /etc/ssh/ sshd_config
+    #   blockinfile:
+    #     path: /etc/ssh/sshd_config
+    #     block: |
+    #       Match User ansible-agent
+    #       PasswordAuthentication no
+    #   notify: reiniciar_sshd
+
+    - name: Insert/Update "Match User" configuration block in /etc/ssh/ sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PasswordAuthentication yes"
+        line: PasswordAuthentication no
+      notify: reiniciar_sshd
+
+    - name: Ver sshd_config después de modificarlo
+      command: cat /etc/ssh/sshd_config
+      register: salida_post
+    - debug: 
+        var: salida_post.stdout_lines
+  
+  handlers: 
+    - name: reiniciar_sshd
+      service:
+        name: sshd
+        state: restarted
