@@ -1,0 +1,26 @@
+- name: Ejemplos de modulos de ficheros y openssl
+  hosts: curso03
+  become: True
+  tasks:
+
+    - name: Crear fichero con contenido especificado
+      copy:
+        content: Esto es un ejemplo 4
+        dest: /tmp/ejemplo_file
+        backup: yes
+
+    - name: Propiedades fichero
+      file: 
+        path: /tmp/ejemplo_file
+        backup: yes
+        mode: "000"
+        owner: "debianuser"
+        group: "debianuser"
+
+    - name: Visualizar backups realizados al modificar el contenido del archivo
+      command: ls -la /tmp/ejemplo_file
+      register: visualizar
+
+    - debug:
+        var: visualizar.stdout_lines
+

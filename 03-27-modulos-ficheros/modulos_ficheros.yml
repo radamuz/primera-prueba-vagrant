@@ -1,0 +1,19 @@
+- name: Ejemplos de modulos de ficheros y openssl
+  hosts: curso03
+  become: True
+  tasks:
+    - name: Crear fichero con contenido especificado
+      copy:
+        content: Esto es un ejemplo
+        dest: /tmp/ejemplo_modulos_ficheros
+
+    - name: Visualizar contenido especificado
+      command: cat /tmp/ejemplo_modulos_ficheros
+      register: contenido_a_visualizar
+
+    - debug: 
+        var: contenido_a_visualizar
+
+    - debug: 
+        msg: El RC es igual a 0
+      when: contenido_a_visualizar.rc == 0
