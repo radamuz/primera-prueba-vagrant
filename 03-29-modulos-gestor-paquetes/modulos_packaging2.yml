@@ -1,0 +1,27 @@
+- name: Trabajar con modulos packaging
+  hosts: curso04
+  become: true
+  tasks:
+    - name: Instalar easy_install
+      yum:
+        name: ["python-setuptools","python-pip"]
+        state: latest
+
+    - name: Instalar pip
+      easy_install: 
+        name: pip
+        state: latest
+      ignore_errors: True
+
+    - name: Instalar modulo requests
+      pip:
+        name: requests
+        state: latest
+
+    - name: Ver version de requests
+      command: "pip list | grep pip"
+      register: salida
+
+    - debug:
+        var: salida
+

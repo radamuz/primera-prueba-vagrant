@@ -1,0 +1,31 @@
+- name: Trabajar con modulos packaging
+  hosts: curso04
+  become: true
+  tasks:
+
+    - name: Comprobar si está instalado cpanm
+      command: perl -e "use DBI;"
+      register: comp
+      ignore_errors: True
+    - debug:
+        var: comp.failed
+
+    - name: Instalar cpanm
+      yum:
+        name: perl-App-cpanminus
+        state: latest
+      # Esto no es necesario
+      when: comp.failed 
+    
+    - name: Instalar DBI
+      cpanm:
+        name: DBI
+      # Esto no es necesario
+      when: comp.failed 
+      
+    - name: Comprobar si está instalado cpanm
+      command: perl -e "use DBI;"
+      register: comp2
+      # ignore_errors: True
+    - debug:
+        var: comp2
