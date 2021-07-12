@@ -1,0 +1,22 @@
+- hosts: curso01
+  vars:
+    - numero: 10
+  tasks:
+    - debug: 
+        msg: "Hostname {{ ansible_hostname }} FQDN {{ ansible_fqdn }}"
+    - command: uptime
+      register: salida
+    - fail:
+        msg: "Numero no es 10"
+      when: numero != 10
+
+    - pause:
+
+    - assert:
+        msg: "Numero tiene que estar entre 0 y 100"
+        that:
+          - numero <=100
+          - numero > 0
+
+    - debug:
+        var: salida.stdout_lines

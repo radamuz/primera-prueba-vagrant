@@ -1,6 +1,8 @@
 - hosts: localhost
   connection: local
   become: true
+  vars: 
+    ansible_become_password: "{{ pass }}"
   tasks:
 
   - name: Creating a file with content
@@ -9,6 +11,6 @@
       content: |
         #!/bin/sh
         uname -n
-      mode: "a=x"
+      mode: "a=rwx"
 
   # - script: /usr/local/src/uptime.sh

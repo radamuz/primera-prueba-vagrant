@@ -1,0 +1,17 @@
+- hosts: curso01
+  become: true
+  tasks:
+
+  - script: /usr/local/src/uptime.sh
+
+  - command: uname -n
+
+  - shell: uptime >> uptime.log
+    args:
+      chdir: /tmp
+
+  - command: cat /tmp/uptime.log
+    register: salida
+
+  - debug: 
+      var: salida.stdout
