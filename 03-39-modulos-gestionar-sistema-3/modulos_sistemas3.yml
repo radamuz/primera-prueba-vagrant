@@ -1,0 +1,30 @@
+- name: moodulos del sistema
+  become: true
+  gather_facts: false
+  hosts: curso01
+  tasks:
+    - debug:
+        var: ansible_hostname
+
+    - name: Permitir redirigir tráfico
+      sysctl:
+        name: net.ipv4.ip_forward
+        value: 1
+        sysctl_set: yes
+        state: present
+        reload: yes
+
+    - name: Habilitar servicio y recargar systemd
+      systemd:
+        name: apache2
+        enabled: yes
+        state: started
+        daemon_reload: yes
+
+    - name: Crear usuario Jboss
+      user:
+        name: jboss
+        id: 185
+        home: /tmp
+        shell: /bin/false
+        state: present

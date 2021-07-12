@@ -1,0 +1,31 @@
+- name: moodulos del sistema
+  become: true
+  hosts: curso01
+  tasks:
+    - iptables:
+        chain: INPUT
+        source: 0.0.0.0
+        destination_port: 80
+        jump: ACCEPT
+        protocol: tcp
+
+    - lvg:
+        vg: datavg
+        pvs: /dev/sdc2
+        state: present
+
+    - lvol:
+        vg: datavg
+        lv: web
+        size: 2G
+        state: present
+
+    - filesystem:
+        dev: /dev/datavg/web
+        fstype: xfs
+
+    - mount:
+        src: /dev/datavg/web
+        name: /var/www
+        state: mounted
+        fstype: xfs
