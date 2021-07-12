@@ -1,0 +1,22 @@
+- name: Trabajar con modulos packaging
+  hosts: curso03:curso01
+  become: true
+  tasks:
+
+    - name: Actualizar lista de paquetes
+      apt:
+        update_cache: yes
+    
+    - name: Actualizar paquetes
+      apt:
+        upgrade: dist
+    
+    - name: Instalar nginx
+      apt:
+        name: nginx
+        state: latest
+        
+    - name: Añadir clave apt
+      apt_key:
+        url: "https://ftp-master.debian.org/keys/archive-key-6.0.asc"
+        state: present
