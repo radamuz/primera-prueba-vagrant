@@ -11,6 +11,8 @@
       when: numero != 10
 
     - pause:
+        prompt: Comprueba la app
+        seconds: 2
 
     - assert:
         msg: "Numero tiene que estar entre 0 y 100"
