@@ -3,8 +3,8 @@
   become: true
   tasks:
     
-    - name: Remove file (delete file)
-      ansible.builtin.file:
+    - name: Remove file delete file
+      file:
         path: /etc/apt/sources.list.d/google-chrome.list
         state: absent
 

@@ -3,8 +3,8 @@
   become: true
   tasks:
 
-    - name: Add the user 'alberto' with a bash shell, appending the group 'admins' to the user's groups
-      ansible.builtin.user:
+    - name: Add the user alberto with a bash shell, appending the group admins to the users groups
+      user:
         name: alberto
         shell: /bin/bash
       
@@ -18,6 +18,10 @@
     - name: install pip
       package:
         name: python3-pip
+
+    - name: install setuptools
+      pip:
+        name: setuptools
 
     - name: install pexpect
       pip:
