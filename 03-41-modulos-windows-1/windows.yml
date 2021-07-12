@@ -1,0 +1,39 @@
+- name: Modulos para windows
+  hosts: windows
+  tasks:
+    - win_command: whoami
+      register: usuario
+
+    - debug:
+        var: usuario
+
+    - win_copy:
+        src: /etc/httpd/conf/httpd.conf
+        dest: c:\Users\alberto\Documents\httpd.conf
+
+    - win_file:
+        path: c:\Users\alberto\Documents\apache2\httpd.conf
+        state: directory
+
+    - win_lineinfile:
+        dest: c:\Users\alberto\Documents\apache2\httpd.conf
+        state: present
+        line: Listen 8080
+        regexp: "^Listen"
+
+    - win_service: 
+        name: spooler
+        state: stopped
+        start_mode: manual
+
+    - win_service: 
+        name: spooler
+        state: started
+        start_mode: auto
+
+    - win_user:
+        name: oforte
+        password: Start123$
+        state: present
+        groups:
+          - Users
