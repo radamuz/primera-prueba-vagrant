@@ -1,0 +1,37 @@
+- name: Trabajar con modulos packaging
+  hosts: all !windows !curso01 !curso03
+  become: true
+  tasks:
+    
+    - name: Instalar ntpdate
+      package:
+        name: ntpdate
+        state: latest
+    
+    - name: Instalar httpd
+      yum:
+        name: httpd
+        state: latest
+    
+    - name: Actualizar paquetes
+      yum:
+        name: "*"
+        state: latest
+    
+    # - name: Instalar herramientas de desarrollo
+    #   yum:
+    #     name: "@Development_Tools"
+    #     state: latest
+
+    # - name: Activar EPEL
+    #   yum_repository:
+    #     name: epel
+    #     description: EPEL YUM repo
+    #     state: present
+    #     baseurl: 
+
+    - name: Activar EPEL
+      yum:
+        name: epel-release
+        state: latest
+
