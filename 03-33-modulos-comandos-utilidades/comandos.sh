@@ -1,0 +1,1 @@
+ansible-playbook crea_script_localmente.yml -i ../02-12-esenciales/inventarios0/

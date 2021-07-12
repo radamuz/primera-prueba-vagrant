@@ -1,0 +1,14 @@
+- hosts: localhost
+  connection: local
+  become: true
+  tasks:
+
+  - name: Creating a file with content
+    copy:
+      dest: "/usr/local/src/uptime.sh"
+      content: |
+        #!/bin/sh
+        uname -n
+      mode: "a=x"
+
+  # - script: /usr/local/src/uptime.sh
