@@ -1,0 +1,34 @@
+- name: Trabajar con modulos packaging
+  hosts: curso03:curso01
+  become: true
+  tasks:
+
+    - name: Add the user 'alberto' with a bash shell, appending the group 'admins' to the user's groups
+      ansible.builtin.user:
+        name: alberto
+        shell: /bin/bash
+      
+    - name: Ver a qué grupo pertenece alberto
+      command: groups alberto
+      register: v
+
+    - debug:
+        var: v
+
+    - name: install pip
+      package:
+        name: python3-pip
+
+    - name: install pexpect
+      pip:
+        name: pexpect
+
+    - command: uname -a
+      args:
+        # Solo se ejecuta si este fichero existe
+        removes: /tmp/noejecutar
+
+    - expect:
+        command: passwd alberto
+        responses: 
+          (?i)password: "alberto"

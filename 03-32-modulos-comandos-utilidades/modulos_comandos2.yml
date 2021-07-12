@@ -1,0 +1,19 @@
+- name: Trabajar con modulos packaging
+  hosts: curso03:curso01
+  become: true
+  tasks:
+    
+    # - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+    #   file:
+    #     path: /tmp/noejecutar
+    #     state: absent
+
+    - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+      file:
+        path: /tmp/noejecutar
+        state: touch
+
+    - command: uname -a
+      args:
+        # Solo se ejecuta si este fichero existe
+        removes: /tmp/noejecutar
