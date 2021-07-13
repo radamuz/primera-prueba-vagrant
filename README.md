@@ -4,6 +4,10 @@
 ```bash
 grep -Eoc '(vmx|svm)' /proc/cpuinfo
 ```
+## Instalación Vagrant
+```bash
+sudo apt install vagrant vagrant-libvirt
+```
 
 ## Instalación KVM
 1. Instalar dependencias y KVM:
