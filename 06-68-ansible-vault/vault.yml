@@ -1,0 +1,5 @@
+- name: Prueba Vault
+  hosts: localhost
+  tasks:
+    - debug: 
+        var: clave

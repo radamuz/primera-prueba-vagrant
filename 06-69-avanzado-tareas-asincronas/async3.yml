@@ -1,0 +1,22 @@
+- name: Ejemplo async
+  hosts: localhost
+  tasks:
+    - command: sleep 15
+      # Tiempo máximo de ejecución
+      async: 60
+      # Tiempo que queremos consultarlo
+      poll: 0
+      register: estado_sleep
+
+    - debug:
+        msg: Otra tarea
+
+    - debug:
+        msg: Y una más
+
+    - async_status:
+        # Job ID
+        jid: "{{ estado_sleep.ansible_job_id }}"
+      register: estado
+      until: estado.finished
+      retries: 30

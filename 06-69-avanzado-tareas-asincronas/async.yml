@@ -1,0 +1,4 @@
+- name: Ejemplo async
+  hosts: localhost
+  tasks:
+    - command: sleep 10

@@ -1,0 +1,8 @@
+- name: Ejemplo async
+  hosts: localhost
+  tasks:
+    - command: sleep 15
+      # Tiempo máximo de ejecución (segundos)
+      async: 60
+      # Tiempo que queremos consultarlo (segundos)
+      poll: 5

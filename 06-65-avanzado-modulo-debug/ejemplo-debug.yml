@@ -1,0 +1,9 @@
+- name:
+  hosts: curso03
+  tasks:
+    - debug:
+        var: ansible_host
+        verbosity: 3
+        
+    - debug:
+        msg: "Mi IP es {{ ansible_host }}"

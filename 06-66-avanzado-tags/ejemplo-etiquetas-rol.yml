@@ -1,0 +1,8 @@
+- name: Ejemplo etiquetas
+  hosts: curso03
+  tasks:
+  roles:
+    - { name: jpnewman.apache, tags: prueba }
+
+# ansible-playbook --tags prod etiquetas.yml
+# No se ejecuta

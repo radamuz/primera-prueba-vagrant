@@ -1,0 +1,40 @@
+- name: ejemplo lookup
+  hosts: www
+  tasks:
+    - debug:
+        msg: "{{ lookup('file','/etc/motd') }}"
+
+        # Realizar acciones en el servidor donde nosotros estamos ejecutando ansible o ansible-playbook
+
+        # Guardar en una variable y copiarla a un archivo
+    - set_fact:
+        etc_motd: "{{ lookup('file','/etc/motd') }}"
+
+    - set_fact:
+        etc_motd2:  "{{ lookup('password','/tmp/www_password.txt') }}"
+
+    - copy:
+        dest: "/tmp/ejemplo"
+        content: "{{ etc_motd }}"
+
+        # Buscar fila2 en el CSV
+    - debug: 
+        msg: "{{ lookup('csvfile','fila2 file=test.csv delimiter=, col=2') }}"
+
+    - debug: 
+        msg: "{{ lookup('ini','engine section=PHP file=/etc/php5/cli/php.ini') }}"
+
+    - debug:
+        msg: "{{ lookup('dig','www.oforte.net') }}"
+
+    - debug:
+        msg: "{{ lookup('dig','oforte.net/MX', wantlist=True) }}"
+
+    - debug:
+        msg: "{{ lookup('dig','oforte.net/MX', 'qtype=MX') }}"
+
+    - debug:
+        msg: "{{ lookup('env','DISPLAY') }}"
+
+    - debug:
+        msg: "{{ lookup('template','prueba.j2') }}"
