@@ -1,0 +1,19 @@
+- name: Modulos apache2
+  hosts: ubuntu
+  tasks:
+    - apache2_module:
+        name: wsgi
+        state: present
+
+    - htpasswd:
+        name: oforte
+        path: /var/www/html/.htpasswd
+        password: Start123
+        mode: 0640
+        owner: www-data
+      delegate_to: localhost
+
+    - supervisorctl:
+        name: long_script
+        state: stopped
+      delegate_to: localhost

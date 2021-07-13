@@ -1,0 +1,18 @@
+- name: Modulos de VCS
+  hosts: localhost
+  tasks:
+    - name: Descargar ansible examples
+      git:
+        repo: git@github.com:radamuz/primera-prueba-vagrant.git
+        dest: /root/ansible-examples
+    
+    - name: Configurar editor a vim
+      git_config:
+        name: core.editor
+        value: vim
+        scope: global
+
+    - name: Descargar wordpress
+      subversion:
+        repo: https://example.example.es
+        dest: /root/wordpress

@@ -1,0 +1,29 @@
+- hosts: curso01
+  vars_files:
+    - vars.yml
+  tasks:
+
+    - postgresql_db:
+        name: oforte 
+        state: present
+        encoding: UTF-8
+        become_user: postgres
+
+    - postgresql_user:
+        name: oforte 
+        state: present
+        password: oforte124
+        db: oforte
+        priv: ALL
+        become_user: postgres
+
+
+    - mongodb_user:
+        name: oforte
+        password: oforte124
+        database: admin
+
+    - influxdb_database:
+        database_name: oforte
+        state: present
+        hostname: localhost

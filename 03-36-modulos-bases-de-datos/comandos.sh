@@ -1,0 +1,1 @@
+ansible-playbook instalar_mysql.yml -i ../02-12-esenciales/inventarios0/

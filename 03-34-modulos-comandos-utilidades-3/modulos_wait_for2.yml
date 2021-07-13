@@ -1,0 +1,15 @@
+- hosts: curso03
+  become: true
+  vars:
+  tasks: 
+
+    - name: Esperar hasta que fichero exista
+      wait_for: 
+        path: /tmp/exista
+
+    - name: Esperar hasta que fichero no exista
+      wait_for: 
+        path: /tmp/exista
+        state: absent
+
+    

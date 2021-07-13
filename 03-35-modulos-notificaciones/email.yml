@@ -1,0 +1,10 @@
+- hosts: curso03
+  become: true
+  vars:
+    - notificar: "email"
+  tasks:
+    - mail:
+        subject: "Tarea finalizada"
+        body: "Tarea finalizada {{ ansible_fqdn }}"
+      when: notificar == "email"
+      delegate_to: curso02

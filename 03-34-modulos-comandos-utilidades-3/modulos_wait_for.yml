@@ -1,0 +1,9 @@
+- hosts: localhost
+  become: true
+  vars:
+    - ansible_become_password: fsdfds
+  tasks: 
+
+    - wait_for: 
+        port: 8080
+        delay: 2

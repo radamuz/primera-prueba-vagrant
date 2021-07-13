@@ -1,0 +1,7 @@
+- hosts: curso03
+  tasks: 
+    - set_fact: 
+        nombre: ansible_hostname
+    
+    - debug:
+        var: nombre

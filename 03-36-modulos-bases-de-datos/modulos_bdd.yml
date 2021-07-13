@@ -1,0 +1,27 @@
+- hosts: curso01
+  vars_files:
+    - vars.yml
+  tasks:
+
+    - name: Try to create dat
+      mysql_db:
+        login_user: deploy
+        login_password: password
+        name: bobdata
+        state: present
+
+
+    - mysql_db:
+        login_user: deploy 
+        login_host: localhost
+        login_password: "{{ mysql_root_password }}"
+        name: oforte
+        state: present
+
+    - mysql_db:
+        login_user: deploy
+        login_host: localhost
+        login_password: "{{ mysql_root_password }}"    
+        name: all
+        state: dump
+        target: /tmp/{{ ansible_hostname }}.sql
