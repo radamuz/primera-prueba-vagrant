@@ -13,17 +13,17 @@ boxes = [
     :mem => "512",
     :cpu => "1",
   },
-  # {
-  #   :ssh_username => "centosuser",
-  #   :ssh_password => "centosuser123",
-  #   :ssh_insert_key => false,
-  #   :name => "server2",
-  #   :box => "roboxes/centos7",
-  #   :eth1 => "192.168.0.252",
-  #   :eth2 => "192.168.1.252",
-  #   :mem => "512",
-  #   :cpu => "1",
-  # },
+  {
+    :ssh_username => "centosuser",
+    :ssh_password => "centosuser123",
+    :ssh_insert_key => false,
+    :name => "server2",
+    :box => "centos/7",
+    :eth1 => "192.168.0.252",
+    :eth2 => "192.168.1.252",
+    :mem => "512",
+    :cpu => "1",
+  },
   {
     :ssh_username => "debianuser",
     :ssh_password => "debianuser123",
@@ -35,39 +35,28 @@ boxes = [
     :mem => "512",
     :cpu => "1",
   },
-  # {
-  #   :ssh_username => "centosuserdos",
-  #   :ssh_password => "centosuserdos123",
-  #   :ssh_insert_key => false,
-  #   :name => "server4",
-  #   :box => "generic/centos7",
-  #   :eth1 => "192.168.0.254",
-  #   :eth2 => "192.168.1.254",
-  #   :mem => "512",
-  #   :cpu => "1",
-  # },
-  # {
-  #     :ssh_username => "windowsuser",
-  #     :ssh_password => "windowsuser123",
-  #     :ssh_insert_key => false,
-  #     :name => "server5",
-  #     :box => "peru/windows-server-2019-standard-x64-eval",
-  #     :eth1 => "192.168.0.250",
-  #     :eth2 => "192.168.1.250",
-  #     :mem => "512",
-  #     :cpu => "2"
-  # }
   {
-    :ssh_username => "centosawxuser",
-    :ssh_password => "centosawxuser123",
+    :ssh_username => "centosuserdos",
+    :ssh_password => "centosuserdos123",
     :ssh_insert_key => false,
-    :name => "server6",
-    :box => "krlex/centos-awx",
-    :eth1 => "192.168.0.249",
-    :eth2 => "192.168.1.249",
+    :name => "server4",
+    :box => "generic/centos7",
+    :eth1 => "192.168.0.254",
+    :eth2 => "192.168.1.254",
     :mem => "512",
     :cpu => "1",
   },
+# {
+#     :ssh_username => "windowsuser",
+#     :ssh_password => "windowsuser123",
+#     :ssh_insert_key => false,
+#     :name => "server5",
+#     :box => "peru/windows-server-2019-standard-x64-eval",
+#     :eth1 => "192.168.0.250",
+#     :eth2 => "192.168.1.250",
+#     :mem => "512",
+#     :cpu => "2"
+# }
 ]
 
 Vagrant.configure("2") do |config|
@@ -102,24 +91,27 @@ Vagrant.configure("2") do |config|
       config.vm.box = opts[:box]
 
       config.vm.network "public_network", ip: opts[:eth1],
+                                          bridge: "xenbr0",
                                           :dev => "xenbr0",
                                           :mode => "bridge",
                                           :type => "bridge"
 
       config.vm.network "public_network", ip: opts[:eth2],
+                                          bridge: "xenbr0",
                                           :dev => "xenbr0",
                                           :mode => "bridge",
                                           :type => "bridge"
 
-      config.vm.provider "virtualbox" do |v|
-        v.memory = opts[:mem]
-        v.cpus = opts[:cpu]
-        # if opts[:ssh_username] = "centosawxuser"
-        #   end
-        # else
-        #   config.vm.provider :libvirt do |libvirt|
-        #     libvirt.cpus = opts[:cpu]
-        #     libvirt.memory = opts[:mem]
+      if opts[:ssh_username] = "centosawxuser"
+        config.vm.provider "virtualbox" do |v|
+          v.memory = opts[:mem]
+          v.cpus = opts[:cpu]
+        end
+      else
+        config.vm.provider :libvirt do |libvirt|
+          libvirt.cpus = opts[:cpu]
+          libvirt.memory = opts[:mem]
+        end
       end
     end
   end
