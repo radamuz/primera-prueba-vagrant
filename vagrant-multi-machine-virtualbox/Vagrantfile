@@ -1,0 +1,126 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+boxes = [
+  {
+    :ssh_username => "ubuntuuser",
+    :ssh_password => "ubuntuuser123",
+    :ssh_insert_key => false,
+    :name => "server1",
+    :box => "generic/ubuntu2010",
+    :eth1 => "192.168.0.251",
+    :eth2 => "192.168.1.251",
+    :mem => "512",
+    :cpu => "1",
+  },
+  # {
+  #   :ssh_username => "centosuser",
+  #   :ssh_password => "centosuser123",
+  #   :ssh_insert_key => false,
+  #   :name => "server2",
+  #   :box => "roboxes/centos7",
+  #   :eth1 => "192.168.0.252",
+  #   :eth2 => "192.168.1.252",
+  #   :mem => "512",
+  #   :cpu => "1",
+  # },
+  {
+    :ssh_username => "debianuser",
+    :ssh_password => "debianuser123",
+    :ssh_insert_key => false,
+    :name => "server3",
+    :box => "generic/debian10",
+    :eth1 => "192.168.0.253",
+    :eth2 => "192.168.1.253",
+    :mem => "512",
+    :cpu => "1",
+  },
+  # {
+  #   :ssh_username => "centosuserdos",
+  #   :ssh_password => "centosuserdos123",
+  #   :ssh_insert_key => false,
+  #   :name => "server4",
+  #   :box => "generic/centos7",
+  #   :eth1 => "192.168.0.254",
+  #   :eth2 => "192.168.1.254",
+  #   :mem => "512",
+  #   :cpu => "1",
+  # },
+  # {
+  #     :ssh_username => "windowsuser",
+  #     :ssh_password => "windowsuser123",
+  #     :ssh_insert_key => false,
+  #     :name => "server5",
+  #     :box => "peru/windows-server-2019-standard-x64-eval",
+  #     :eth1 => "192.168.0.250",
+  #     :eth2 => "192.168.1.250",
+  #     :mem => "512",
+  #     :cpu => "2"
+  # }
+  {
+    :ssh_username => "centosawxuser",
+    :ssh_password => "centosawxuser123",
+    :ssh_insert_key => false,
+    :name => "server6",
+    :box => "krlex/centos-awx",
+    :eth1 => "192.168.0.249",
+    :eth2 => "192.168.1.249",
+    :mem => "512",
+    :cpu => "1",
+  },
+]
+
+Vagrant.configure("2") do |config|
+  boxes.each do |opts|
+    config.vm.define opts[:name] do |config|
+      config.vm.hostname = opts[:name]
+
+      # config.ssh.username = opts[:ssh_username]
+      # config.ssh.password = opts[:ssh_password]
+      # config.ssh.insert_key = opts[:ssh_insert_key]
+
+      if opts[:ssh_username] != "windowsuser"
+        config.vm.provision "shell",
+                            env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
+                            inline: <<-SHELL
+          sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+          systemctl restart sshd.service
+  
+          useradd -m -s /usr/bin/bash $MYUSER
+          echo -e "$MYPASS\n$MYPASS" | passwd $MYUSER
+  
+          usermod -aG sudo $MYUSER
+  
+          echo "$MYUSER    ALL=(ALL)       ALL" >> /etc/sudoers
+        SHELL
+      else
+        config.vm.provision "shell",
+                            env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
+                            path: "../01-08-windows/ConfigureRemotingForAnsible.ps1"
+      end
+
+      config.vm.box = opts[:box]
+
+      config.vm.network "public_network", ip: opts[:eth1],
+                                          :dev => "xenbr0",
+                                          :mode => "bridge",
+                                          :type => "bridge"
+
+      config.vm.network "public_network", ip: opts[:eth2],
+                                          :dev => "xenbr0",
+                                          :mode => "bridge",
+                                          :type => "bridge"
+
+      config.vm.provider "virtualbox" do |v|
+        v.memory = opts[:mem]
+        v.cpus = opts[:cpu]
+        # if opts[:ssh_username] = "centosawxuser"
+        #   end
+        # else
+        #   config.vm.provider :libvirt do |libvirt|
+        #     libvirt.cpus = opts[:cpu]
+        #     libvirt.memory = opts[:mem]
+      end
+    end
+  end
+end
