@@ -47,3 +47,6 @@ ip a | grep xenbr0
 ```bash
 sudo sed -i 's/SHUTDOWN_TIMEOUT=300/SHUTDOWN_TIMEOUT=0/g' /usr/lib/libvirt/libvirt-guests.sh
 ```
+
+## Reenvío de puertos en Virtualbox (redes NAT)
+![reenvio puertos en Vbox](./reenvio-puertos-virtualbox.png "reenvio puertos en Vbox")
