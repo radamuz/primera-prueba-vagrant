@@ -7,17 +7,19 @@ boxes = [
     :ssh_password => "ubuntuuser123",
     :ssh_insert_key => false,
     :name => "server1",
+    :descripcion => "MV usada para utilizar ansible",
     :box => "generic/ubuntu2010",
     :eth1 => "192.168.0.251",
     :eth2 => "192.168.1.251",
-    :mem => "512",
-    :cpu => "1",
+    :mem => "2048",
+    :cpu => "2",
   },
   {
     :ssh_username => "centosuser",
     :ssh_password => "centosuser123",
     :ssh_insert_key => false,
     :name => "server2",
+    :descripcion => "",
     :box => "centos/7",
     :eth1 => "192.168.0.252",
     :eth2 => "192.168.1.252",
@@ -29,6 +31,7 @@ boxes = [
     :ssh_password => "debianuser123",
     :ssh_insert_key => false,
     :name => "server3",
+    :descripcion => "",
     :box => "generic/debian10",
     :eth1 => "192.168.0.253",
     :eth2 => "192.168.1.253",
@@ -40,6 +43,7 @@ boxes = [
     :ssh_password => "centosuserdos123",
     :ssh_insert_key => false,
     :name => "server4",
+    :descripcion => "",
     :box => "generic/centos7",
     :eth1 => "192.168.0.254",
     :eth2 => "192.168.1.254",
@@ -51,6 +55,7 @@ boxes = [
   #     :ssh_password => "windowsuser123",
   #     :ssh_insert_key => false,
   #     :name => "server5",
+  #     :descripcion => "",
   #     :box => "peru/windows-server-2019-standard-x64-eval",
   #     :eth1 => "192.168.0.250",
   #     :eth2 => "192.168.1.250",
@@ -62,10 +67,11 @@ boxes = [
     :ssh_password => "centosawxuser123",
     :ssh_insert_key => false,
     :name => "server6",
+    :descripcion => "MV usada para desplegar AWX automáticamente, pero es una versión antigua, por lo que mi idea es desplegar otra máquina con AWX desplegado con ansible galaxy",
     :box => "krlex/centos-awx",
     :eth1 => "192.168.0.249",
     :eth2 => "192.168.1.249",
-    :mem => "512",
+    :mem => "1024",
     :cpu => "1",
   },
 ]
@@ -92,25 +98,59 @@ Vagrant.configure("2") do |config|
           usermod -aG sudo $MYUSER
   
           echo "$MYUSER    ALL=(ALL)       ALL" >> /etc/sudoers
+
         SHELL
+        
       else
         config.vm.provision "shell",
+        env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
+        path: "../01-08-windows/ConfigureRemotingForAnsible.ps1"
+      end
+      
+      if opts[:name] == "server6"
+        config.vm.provision "shell",
                             env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
-                            path: "../01-08-windows/ConfigureRemotingForAnsible.ps1"
+                            inline: <<-SHELL
+
+          HOME=/home/vagrant
+          /usr/bin/sh /home/vagrant/init.sh
+
+        SHELL
+      end
+
+      if opts[:name] == "server1"
+        
+        config.vm.synced_folder "../../primera-prueba-vagrant", 
+                                "/home/vagrant/primera-prueba-vagrant",
+                                owner: "vagrant",
+                                group: "vagrant"
+        
+        config.vm.provision "shell",
+                            env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
+                            inline: <<-SHELL
+    
+          /usr/bin/apt update
+          # /usr/bin/apt upgrade -y
+          /usr/bin/apt install ansible -y
+          echo "Estoy funcionando" >> /tmp/shell-provision-prueba
+    
+        SHELL
       end
 
       config.vm.box = opts[:box]
-
-      # config.vm.network "public_network", ip: opts[:eth1],
+      
+      config.vm.network "public_network", ip: opts[:eth1]
+      #                                     :dev => "xenbr0",
+      #                                     :mode => "bridge",
+      #                                     :type => "bridge"
+      
+      # config.vm.network "public_network", ip: opts[:eth2]
       #                                     :dev => "xenbr0",
       #                                     :mode => "bridge",
       #                                     :type => "bridge"
 
-      config.vm.network "public_network", ip: opts[:eth2]
-      #                                     :dev => "xenbr0",
-      #                                     :mode => "bridge",
-      #                                     :type => "bridge"
-
+      config.vm.network "private_network", type: "dhcp"
+      
       config.vm.provider "virtualbox" do |v|
         v.memory = opts[:mem]
         v.cpus = opts[:cpu]
