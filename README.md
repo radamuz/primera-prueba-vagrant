@@ -50,3 +50,11 @@ sudo sed -i 's/SHUTDOWN_TIMEOUT=300/SHUTDOWN_TIMEOUT=0/g' /usr/lib/libvirt/libvi
 
 ## Reenvío de puertos en Virtualbox (redes NAT)
 ![reenvio puertos en Vbox](./reenvio-puertos-virtualbox.png "reenvio puertos en Vbox")
+
+## Los shell scripts de UNIX tienes un fin de línea distinto a los de Windows
+```bash
+dos2unix multi-copy-ssh-public-key.sh
+```
+> Fuentes: 
+> * <https://stackoverflow.com/questions/39527571/are-shell-scripts-sensitive-to-encoding-and-line-endings>
+> * <https://stackoverflow.com/questions/68385236/i-run-a-sh-script-created-by-me-and-it-fails-because-it-finds-invalid-characters> 
