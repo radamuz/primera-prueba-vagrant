@@ -1,4 +1,3 @@
 - name: Prueba ping awx
-  hosts: curso01
   tasks:
     - ping:
