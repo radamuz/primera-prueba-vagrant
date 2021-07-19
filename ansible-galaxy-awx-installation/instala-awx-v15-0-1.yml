@@ -1,0 +1,191 @@
+- name: Instala AWX en Ubuntu 20.04 y Debian 10. Versión de ansible válida para que funcione 2.9.23
+  hosts: 192.168.0.253
+  become: True
+  vars_prompt:
+
+    - name: my_password2
+      prompt: Introducir password para AWX, presiona enter dos veces en caso de que quieras generar una contraseña aleatoria
+      private: yes
+      confirm: yes
+
+  tasks:
+    - name: Actualiza los repositorios
+      apt:
+        update_cache: yes
+      # when: ansible_distribution == "Ubuntu"
+
+    - name: Add an Apt signing key, uses whichever key is at the URL in Debian
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+      when: ansible_distribution == "Debian"
+
+    - name: Add an Apt signing key, uses whichever key is at the URL in Ubuntu
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Add specified repository into sources list in Ubuntu
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Add specified repository into sources list in Debian
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+        state: present
+      when: ansible_distribution == "Debian"
+
+    - name: Instalar claves en Debian y Ubuntu para instalar ansible
+      ansible.builtin.apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: 93C4A3FD7BB9C367
+
+    - name: Instalar Ansible en Debian y Ubuntu
+      ansible.builtin.apt_repository:
+        repo: "deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main"
+        state: present
+
+    - name: Actualiza los repositorios e instala docker.
+      apt:
+        name: ["docker-ce", "docker-ce-cli", "containerd.io", "ansible", "nodejs", "npm", "python3-pip", "git", "pwgen", "unzip"]
+        update_cache: yes
+        state: latest
+      # when: ansible_distribution == "Ubuntu"
+
+    - name: Add the user to docker group
+      ansible.builtin.user:
+        name: "{{ ansible_user_id }}"
+        group: docker
+
+    - name: Restart docker
+      ansible.builtin.systemd:
+        name: docker.service
+        state: reloaded
+
+    - name: Descargamos docker compose
+      shell: |
+        curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep docker-compose-Linux-x86_64 | cut -d '"' -f 4 | wget -qi -
+
+    - debug:
+        msg: "Nos encontramos en el directorio: {{ ansible_env.PWD }}"
+
+    - name: Change file ownership, group and permissions
+      ansible.builtin.file:
+        path: "{{ ansible_env.PWD }}/docker-compose-Linux-x86_64"
+        # owner: vagrant
+        # group: vagrant
+        mode: u+x
+
+    - name: Comprobar que fichero {{ ansible_env.PWD }}/docker-compose-Linux-x86_64 existe
+      stat: 
+        path: "{{ ansible_env.PWD }}/docker-compose-Linux-x86_64"
+      register: dc_stat
+
+    - name: Mover docker compose a PATH
+      command: mv $PWD/docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
+      when: dc_stat.stat.exists
+
+    - name: Instala "npm" node.js package globally.
+      community.general.npm:
+        name: npm
+        global: yes
+
+    - name: Obtener versión docker-compose
+      shell: docker-compose --version | cut -d" " -f3 | sed 's/,//' | tr -d '\n'
+      register: dcv
+
+    - debug: 
+        msg: 
+          - La versión de docker-compose es {{ dcv.stdout }}
+
+    - name: Instalar docker-compose version {{ dcv.stdout }}
+      pip:
+        name: docker-compose=={{ dcv.stdout }}
+        executable: pip3
+
+    # - name: Obtener versión y archivo zip a su vez de última versión de awx
+    #   ansible.builtin.shell: curl -s https://api.github.com/repos/ansible/awx/releases/latest | grep zipball_url | grep awx | cut -d '"' -f 4 | cut -d"/" -f8 | tr -d "\n"
+    #   register: aav
+
+    # - debug: 
+    #     msg: 
+    #       - La versión de ansible AWX es {{ aav.stdout }} 
+
+    # - name: Descargar archivo instalación de última versión de awx
+    #   ansible.builtin.shell: curl -s https://api.github.com/repos/ansible/awx/releases/latest | grep zipball_url | grep awx | cut -d '"' -f 4 | wget -qi -
+
+    # - name: Unarchive a file that is already on the remote machine
+    #   ansible.builtin.unarchive:
+    #     src: {{ ansible_env.PWD }}/{{ aav.stdout }} 
+    #     dest: {{ ansible_env.PWD }}
+    #     remote_src: yes
+
+    - name: Comprobar si fichero zip existe
+      stat: 
+        path: "{{ ansible_env.PWD }}/15.0.1.zip"
+      register: zip_stat
+
+    - name: Descargar zip de versión de awx 15.0.1
+      get_url:
+        url: https://github.com/ansible/awx/archive/15.0.1.zip
+        dest: "{{ ansible_env.PWD }}/15.0.1.zip"
+      when: zip_stat.stat.exists == false
+
+    - name: Unarchive a file that is already on the remote machine
+      ansible.builtin.unarchive:
+        src: "{{ ansible_env.PWD }}/15.0.1.zip"
+        dest: "{{ ansible_env.PWD }}"
+        remote_src: yes
+      when: zip_stat.stat.exists == false
+
+    - name: Obtener contraseña acceso AWX
+      shell: pwgen -N 1 -s 30
+      register: awxpass
+      when: my_password2 == ""
+      ignore_errors: True
+
+    - debug:
+        msg: "La contraseña generada aleatoriamente para obtener acceso a AWX es la siguiente: {{ awxpass.stdout }}"
+      when: my_password2 == ""
+      ignore_errors: True
+
+    - name: Cambiar contraseña por defecto de AWX
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.PWD }}/awx-15.0.1/installer/inventory"
+        regexp: '^# admin_password=password'
+        line: admin_password={{ awxpass.stdout }}
+      when: my_password2 == ""
+
+    - name: Cambiar contraseña de secreto de AWX
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.PWD }}/awx-15.0.1/installer/inventory"
+        regexp: '^secret_key=awxsecret'
+        line: secret_key={{ awxpass.stdout }}
+      when: my_password2 == ""
+
+    - name: Cambiar contraseña por defecto de AWX cuando se utiliza variable del prompt
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.PWD }}/awx-15.0.1/installer/inventory"
+        regexp: '^# admin_password=password'
+        line: admin_password={{ my_password2 }}
+      when: my_password2 != ""
+
+    - name: Cambiar contraseña de secreto de AWX cuando se utiliza variable del prompt
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.PWD }}/awx-15.0.1/installer/inventory"
+        regexp: '^secret_key=awxsecret'
+        line: secret_key={{ my_password2 }}
+      when: my_password2 != ""
+
+    - debug:
+        msg: "La contraseña que has introducido para obtener acceso a AWX es la siguiente: {{ my_password2 }}"
+      when: my_password2 != ""
+
+    - name: Iniciar el archivo de playbook para instalar AWX
+      command: ansible-playbook -i {{ ansible_env.PWD }}/awx-15.0.1/installer/inventory {{ ansible_env.PWD }}/awx-15.0.1/installer/install.yml
+
+    - name: Iniciar el archivo de playbook para instalar AWX por segunda vez, ya que la mayoría de veces no funciona ejecutándolo una sola vez.
+      command: ansible-playbook -i {{ ansible_env.PWD }}/awx-15.0.1/installer/inventory {{ ansible_env.PWD }}/awx-15.0.1/installer/install.yml
