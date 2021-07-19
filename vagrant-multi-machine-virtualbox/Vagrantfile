@@ -100,13 +100,12 @@ Vagrant.configure("2") do |config|
           echo "$MYUSER    ALL=(ALL)       ALL" >> /etc/sudoers
 
         SHELL
-        
       else
         config.vm.provision "shell",
-        env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
-        path: "../01-08-windows/ConfigureRemotingForAnsible.ps1"
+                            env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
+                            path: "../01-08-windows/ConfigureRemotingForAnsible.ps1"
       end
-      
+
       if opts[:name] == "server6"
         config.vm.provision "shell",
                             env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
@@ -119,15 +118,13 @@ Vagrant.configure("2") do |config|
       end
 
       if opts[:name] == "server1"
-        
-        config.vm.synced_folder "../../primera-prueba-vagrant", 
+        config.vm.synced_folder "../../primera-prueba-vagrant",
                                 "/home/vagrant/primera-prueba-vagrant",
                                 owner: "vagrant",
                                 group: "vagrant",
                                 dmode: 770,
                                 fmode: 770
 
-        
         config.vm.provision "shell",
                             env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
                             inline: <<-SHELL
@@ -141,19 +138,19 @@ Vagrant.configure("2") do |config|
       end
 
       config.vm.box = opts[:box]
-      
+
       config.vm.network "public_network", ip: opts[:eth1]
       #                                     :dev => "xenbr0",
       #                                     :mode => "bridge",
       #                                     :type => "bridge"
-      
+
       # config.vm.network "public_network", ip: opts[:eth2]
       #                                     :dev => "xenbr0",
       #                                     :mode => "bridge",
       #                                     :type => "bridge"
 
       config.vm.network "private_network", type: "dhcp"
-      
+
       config.vm.provider "virtualbox" do |v|
         v.memory = opts[:mem]
         v.cpus = opts[:cpu]
