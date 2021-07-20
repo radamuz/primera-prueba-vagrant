@@ -1,0 +1,8 @@
+- name: Prueba paquetes awx
+  become: true
+  hosts: all
+  tasks:
+    - name: Remove the apache package
+      ansible.builtin.package:
+        name: "{{ apache }}"
+        state: latest
