@@ -1,4 +1,5 @@
 - name: Prueba ping awx
+  include_vars: vars.yml
   hosts: all
   tasks:
     - ping:
