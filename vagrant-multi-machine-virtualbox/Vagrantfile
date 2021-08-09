@@ -139,7 +139,7 @@ Vagrant.configure("2") do |config|
 
       config.vm.box = opts[:box]
 
-      config.vm.network "public_network", ip: opts[:eth1]
+      config.vm.network "public_network", bridge: "Intel(R) Ethernet Connection (10) I219-V", ip: opts[:eth1]
       #                                     :dev => "xenbr0",
       #                                     :mode => "bridge",
       #                                     :type => "bridge"
