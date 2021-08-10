@@ -130,6 +130,19 @@ Vagrant.configure("2") do |config|
         #                     env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
         #                     inline: <<-SHELL
 
+        # start=$(cat /sys/block/sda/sda3/start)
+        # end=$(($start+$(cat /sys/block/sda/sda3/size)))
+        # newend=$(($(cat /sys/block/sda/size)-8))
+
+        # if [ "$newend" -gt "$end" ]
+        # then
+        #     parted -s /dev/sda unit s resize 3 $start $newend
+        # fi
+        # SHELL
+        # config.vm.provision "shell",
+        #                     env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
+        #                     inline: <<-SHELL
+
         #   /usr/bin/apt update
         #   # /usr/bin/apt upgrade -y
         #   /usr/bin/apt install ansible -y
@@ -155,6 +168,7 @@ Vagrant.configure("2") do |config|
       config.vm.provider "virtualbox" do |v|
         v.memory = opts[:mem]
         v.cpus = opts[:cpu]
+        v.customize ["modifyvm", :id, "--vram", "256"]
         # if opts[:ssh_username] = "centosawxuser"
         #   end
         # else
