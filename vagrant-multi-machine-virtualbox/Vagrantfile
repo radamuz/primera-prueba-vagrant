@@ -118,6 +118,7 @@ Vagrant.configure("2") do |config|
       end
 
       if opts[:name] == "server1"
+        config.disksize.size = "100GB"
         config.vm.synced_folder "../../",
                                 "/home/vagrant/shared",
                                 owner: "vagrant",
@@ -128,12 +129,12 @@ Vagrant.configure("2") do |config|
         # config.vm.provision "shell",
         #                     env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
         #                     inline: <<-SHELL
-    
+
         #   /usr/bin/apt update
         #   # /usr/bin/apt upgrade -y
         #   /usr/bin/apt install ansible -y
         #   echo "Estoy funcionando" >> /tmp/shell-provision-prueba
-    
+
         # SHELL
       end
 
