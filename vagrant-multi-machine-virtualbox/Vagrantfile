@@ -8,7 +8,7 @@ boxes = [
     :ssh_insert_key => false,
     :name => "server1",
     :descripcion => "MV usada para utilizar ansible y AWX",
-    :box => "generic/ubuntu2004",
+    :box => "stapia/xubuntu_21_04_es",
     :eth1 => "192.168.0.251",
     :eth2 => "192.168.1.251",
     :mem => "2048",
@@ -125,16 +125,16 @@ Vagrant.configure("2") do |config|
                                 dmode: 777,
                                 fmode: 777
 
-        config.vm.provision "shell",
-                            env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
-                            inline: <<-SHELL
+        # config.vm.provision "shell",
+        #                     env: { "MYPASS" => opts[:ssh_password], "MYUSER" => opts[:ssh_username] },
+        #                     inline: <<-SHELL
     
-          /usr/bin/apt update
-          # /usr/bin/apt upgrade -y
-          /usr/bin/apt install ansible -y
-          echo "Estoy funcionando" >> /tmp/shell-provision-prueba
+        #   /usr/bin/apt update
+        #   # /usr/bin/apt upgrade -y
+        #   /usr/bin/apt install ansible -y
+        #   echo "Estoy funcionando" >> /tmp/shell-provision-prueba
     
-        SHELL
+        # SHELL
       end
 
       config.vm.box = opts[:box]
