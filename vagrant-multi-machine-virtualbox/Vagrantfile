@@ -11,8 +11,8 @@ boxes = [
     :box => "stapia/xubuntu_21_04_es",
     :eth1 => "192.168.0.251",
     :eth2 => "192.168.1.251",
-    :mem => "4096",
-    :cpu => "2",
+    :mem => "5120",
+    :cpu => "3",
   },
   {
     :ssh_username => "centosuser",
